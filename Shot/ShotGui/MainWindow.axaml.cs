@@ -6,29 +6,39 @@ namespace ShotGui
 {
     public partial class MainWindow : Window
     {
-        private Window _screenshotRegion;
-        private readonly SelectedRegion _selectedRegion;
+        //private Window _screenshotRegion;
+        //private readonly SelectedRegion _selectedRegion;
+        private readonly IWindowsMediator _windowsMediator;
 
-        public MainWindow()
+        public MainWindow(IWindowsMediator windowsMediator)
         {
             InitializeComponent();
-            _selectedRegion = new SelectedRegion();
+            _windowsMediator = windowsMediator;
         }
 
-        private Window ScreenshotRegion =>
-            LazyInitializer.EnsureInitialized(
-                ref _screenshotRegion,
-                CreateScreenshotRegion);
+        //private Window ScreenshotRegion =>
+        //    LazyInitializer.EnsureInitialized(
+        //        ref _screenshotRegion,
+        //        CreateScreenshotRegion);
 
         private void Button_OnClick(object? sender, RoutedEventArgs e)
         {
-            ScreenshotRegion.Show(this);
-            var i = 42;
+            //this.Hide();
+            //ScreenshotRegion.Show();
+            _windowsMediator.SwitchToScreenshotRegion();
         }
 
-        private Window CreateScreenshotRegion()
-        {
-            return new ScreenshotRegion();
-        }
+        //private Window CreateScreenshotRegion()
+        //{
+        //    var r = new ScreenshotRegion(this);
+        //    //r.Hide();
+        //    return r;
+        //}
+
+        //protected override void OnClosing(WindowClosingEventArgs e)
+        //{
+        //    ScreenshotRegion.Close();
+        //    base.OnClosing(e);
+        //}
     }
 }
