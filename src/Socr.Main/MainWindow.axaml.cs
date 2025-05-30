@@ -1,18 +1,46 @@
 using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Socr.Domain;
 
 namespace Socr.Main;
 
-#pragma warning disable CA1515 // Consider making public types internal
-#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
 public partial class MainWindow : Window
-#pragma warning restore CS1591 // Missing XML comment for publicly visible type or member
-#pragma warning restore CA1515 // Consider making public types internal
 {
+    private ScreenRegionWindow _screenRegion;
+
     /// <summary>
     /// Constructor.
     /// </summary>
     public MainWindow()
     {
         InitializeComponent();
+    }
+
+    public MainScenario MainScenario { get; init; }
+
+    private ScreenRegionWindow ScreenRegionWindow =>
+        LazyInitializer.EnsureInitialized(
+            ref _screenRegion,
+            CreateScreenshotRegion);
+
+    protected override void OnClosing(WindowClosingEventArgs e)
+    {
+        ScreenRegionWindow.Close();
+        base.OnClosing(e);
+    }
+
+    private void CaptureButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        ScreenRegionWindow.Show();
+    }
+
+    private ScreenRegionWindow CreateScreenshotRegion()
+    {
+        var r = new ScreenRegionWindow()
+        {
+            MainScenario = MainScenario
+        };
+
+        return r;
     }
 }
