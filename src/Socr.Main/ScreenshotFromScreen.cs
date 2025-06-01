@@ -14,12 +14,20 @@ internal sealed class ScreenshotFromScreen
         var height = screenRegion.Height;
         var settings = new MagickReadSettings
         {
-            ExtractArea = new MagickGeometry(x, y, width, height)
+            ExtractArea = new MagickGeometry(x, y, width, height),
         };
 
-        using var mImage = new ImageMagick.MagickImage("screenshot:", settings);
-        var data = mImage.ToByteArray(MagickFormat.Png);
-        var screenShot = new Screenshot(data);
-        return Task.FromResult(Result.Success(screenShot));
+        var result = Result.Try(
+        () =>
+        {
+            using var mImage = new MagickImage("screenshot:", settings);
+            var data = mImage.ToByteArray(MagickFormat.Png);
+            var screenshot = new Screenshot(data);
+            return screenshot;
+        },
+        ex =>
+            $"Error on get sreenshot. {ex.Message}");
+
+        return Task.FromResult(result);
     }
 }
