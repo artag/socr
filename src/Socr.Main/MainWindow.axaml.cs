@@ -16,7 +16,12 @@ public partial class MainWindow : Window
         InitializeComponent();
     }
 
-    public MainScenario MainScenario { get; init; }
+    public MainScenario MainScenario { get; set; }
+
+    public void SetStatus(string text)
+    {
+        Status.Text = text;
+    }
 
     private ScreenRegionWindow ScreenRegionWindow =>
         LazyInitializer.EnsureInitialized(

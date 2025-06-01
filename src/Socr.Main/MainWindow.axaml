@@ -10,8 +10,31 @@
     Height="200"
     x:Class="Socr.Main.MainWindow"
     Title="socr">
-    <Button
-        Click="CaptureButton_OnClick">
-        Capture
-    </Button>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Button
+            Grid.Column="0"
+            Grid.Row="0"
+            Click="CaptureButton_OnClick">
+            Capture
+        </Button>
+
+        <Border
+            Grid.Row="1"
+            Padding="5, 5, 5, 5"
+            BorderBrush="Black"
+            BorderThickness="1">
+            <StackPanel
+                Orientation="Horizontal">
+                <TextBlock
+                    Text="Status:"/>
+                <TextBlock
+                    Name="Status"/>
+            </StackPanel>
+        </Border>
+    </Grid>
 </Window>
