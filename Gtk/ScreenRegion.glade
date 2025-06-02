@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.22.2 -->
+<interface>
+  <requires lib="gtk+" version="3.18"/>
+  <object class="GtkWindow" id="ScreenRegion">
+    <property name="can_focus">False</property>
+    <property name="opacity">0.5</property>
+    <property name="type">popup</property>
+    <property name="title" translatable="yes">Example Window</property>
+    <property name="window_position">center</property>
+    <property name="default_width">200</property>
+    <property name="default_height">200</property>
+    <property name="decorated">False</property>
+    <child type="titlebar">
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+  </object>
+</interface>
