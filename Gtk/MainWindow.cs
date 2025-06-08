@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Gdk;
 using Gtk;
 using UI = Gtk.Builder.ObjectAttribute;
@@ -7,45 +8,58 @@ namespace Gtk
 {
     class MainWindow : Window
     {
-        [UI] private Label _label1 = null;
-        [UI] private Button _button1 = null;
+        [UI]
+        private Button _buttonCapture = null;
+        [UI]
+        private Label _labelStatusText = null;
+        private ScreenRegion _screenRegion;
 
-        private int _counter;
+        public MainWindow()
+            : this(new Builder("MainWindow.glade"))
+        {
+        }
 
-        public MainWindow() : this(new Builder("MainWindow.glade")) { }
-
-        private MainWindow(Builder builder) : base(builder.GetRawOwnedObject("MainWindow"))
+        private MainWindow(Builder builder)
+            : base(builder.GetRawOwnedObject("MainWindow"))
         {
             builder.Autoconnect(this);
 
             DeleteEvent += Window_DeleteEvent;
-            _button1.Clicked += Button1_Clicked;
+            _buttonCapture.Clicked += ButtonCaptureClicked;
+            _labelStatusText.Text = "Ready";
         }
+
+        private ScreenRegion ScreenRegion =>
+            LazyInitializer.EnsureInitialized(
+                ref _screenRegion,
+                CreateScreenRegionWindow);
 
         private void Window_DeleteEvent(object sender, DeleteEventArgs a)
         {
+            ScreenRegion?.Close();
             Application.Quit();
         }
 
-        private void Button1_Clicked(object sender, EventArgs a)
+        private void ButtonCaptureClicked(object sender, EventArgs a)
         {
+            ScreenRegion.ShowAll();
+            // w.Decorated = false;
+            // w.Opacity = 0.5;
+            // Window w = new Window("My first GTK# Application! ");
+            // w.Resize(200,200);
+            // var myLabel = new Label();
+            // myLabel.Text = "Hello World!!!!";
+            // w.Add(myLabel);
+            // w.ShowAll();
 
-            Window w = new Window("My first GTK# Application! ");
-            w.Resize(200,200);
-            var myLabel = new Label();
-            myLabel.Text = "Hello World!!!!";
-            w.Add(myLabel);
-            w.ShowAll();
-            w.Decorated = false;
-            w.Opacity = 0.5;
 
-            Gdk.Window window = Gdk.Global.DefaultRootWindow;
-            if (window!=null)
-            {
-                var pixBuf = new Pixbuf(window, 10, 10, 1000, 500);
-                var dt = DateTime.Now;
-                pixBuf.Save($"/home/agart/1/{dt.ToString("HH-mm-ss")}.png", "png");
-            }
+            // Gdk.Window window = Gdk.Global.DefaultRootWindow;
+            // if (window!=null)
+            // {
+            //     var pixBuf = new Pixbuf(window, 10, 10, 1000, 500);
+            //     var dt = DateTime.Now;
+            //     pixBuf.Save($"/home/agart/1/{dt.ToString("HH-mm-ss")}.png", "png");
+            // }
 
 
             // Gdk.Window rootWindow = Gdk.Window.GetDefaultRootWindow();
@@ -65,6 +79,12 @@ namespace Gtk
 
             // _counter++;
             // _label1.Text = "Hello World! This button has been clicked " + _counter + " time(s).";
+        }
+
+        private ScreenRegion CreateScreenRegionWindow()
+        {
+            var r = new ScreenRegion();
+            return r;
         }
     }
 }
